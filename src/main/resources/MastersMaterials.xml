@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="https://jakarta.ee/xml/ns/persistence/orm"
+                 version="3.0">
+
+    <entity class="salon.MastersMaterials">
+        <table name="masters_materials" schema="public" catalog="beauty_salon"/>
+        <attributes>
+            <id name="id">
+            </id>
+            <basic name="quantity">
+                <column name="quantity"/>
+            </basic>
+            <many-to-one name="mastersByMastersId" optional="true" target-entity="salon.Masters">
+                <join-column name="masters_id" nullable="false" referenced-column-name="id"/>
+            </many-to-one>
+            <many-to-one name="materialsByMaterialsId" optional="true" target-entity="salon.Materials">
+                <join-column name="materials_id" nullable="false" referenced-column-name="id"/>
+            </many-to-one>
+        </attributes>
+    </entity>
+</entity-mappings>

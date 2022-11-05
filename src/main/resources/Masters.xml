@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="https://jakarta.ee/xml/ns/persistence/orm"
+                 version="3.0">
+
+    <named-query name="Masters.all">
+        <query><![CDATA[FROM Masters m]]></query>
+    </named-query>
+    <named-query name="Masters.bySurname">
+        <query><![CDATA[FROM Masters m where upper(cast(m.surname as string)) like concat('%', upper(?1), '%')]]></query>
+    </named-query>
+
+    <entity class="salon.Masters">
+        <table name="masters" schema="public" catalog="beauty_salon"/>
+        <attributes>
+            <id name="id">
+                <column name="id"/>
+            </id>
+            <basic name="surname">
+                <column name="surname"/>
+            </basic>
+            <many-to-one name="staffByStaffId" optional="true" target-entity="salon.Staff">
+                <join-column name="staff_id" nullable="false" referenced-column-name="id"/>
+            </many-to-one>
+            <one-to-many name="masterSpecializationsById" mapped-by="mastersByMasterId"
+                         target-entity="salon.MasterSpecialization"/>
+            <one-to-many name="mastersMaterialsById" mapped-by="mastersByMastersId"
+                         target-entity="salon.MastersMaterials"/>
+            <one-to-many name="ordersById" mapped-by="mastersByMasterId" target-entity="salon.Order"/>
+        </attributes>
+    </entity>
+</entity-mappings>

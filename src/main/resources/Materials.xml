@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="https://jakarta.ee/xml/ns/persistence/orm"
+                 version="3.0">
+
+    <named-query name="Materials.all">
+        <query><![CDATA[FROM Materials m]]></query>
+    </named-query>
+    <named-query name="Materials.byName">
+        <query><![CDATA[FROM Materials m where upper(cast(m.position as string)) like concat('%', upper(?1), '%')]]></query>
+    </named-query>
+    <named-query name="Materials.byUnitMeasurement">
+        <query><![CDATA[FROM Materials m where upper(cast(m.unitMeasurement as string)) like concat('%', upper(?1), '%')]]></query>
+    </named-query>
+    <named-query name="Materials.byCost">
+        <query><![CDATA[FROM Materials m where cost = ?1]]></query>
+    </named-query>
+
+    <entity class="salon.Materials">
+        <table name="materials" schema="public" catalog="beauty_salon"/>
+        <attributes>
+            <id name="id">
+                <column name="id"/>
+            </id>
+            <basic name="name">
+                <column name="name"/>
+            </basic>
+            <basic name="unitMeasurement">
+                <column name="unit_measurement"/>
+            </basic>
+            <basic name="cost">
+                <column name="cost"/>
+            </basic>
+            <one-to-many name="mastersMaterialsById" mapped-by="materialsByMaterialsId"
+                         target-entity="salon.MastersMaterials"/>
+        </attributes>
+    </entity>
+</entity-mappings>

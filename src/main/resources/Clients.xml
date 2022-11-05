@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="https://jakarta.ee/xml/ns/persistence/orm"
+                 version="3.0">
+
+    <named-query name="Clients.all">
+        <query><![CDATA[FROM Clients c]]></query>
+    </named-query>
+    <named-query name="Clients.byName">
+        <query><![CDATA[FROM Clients c where upper(cast(c.name as string)) like concat('%', upper(?1), '%')]]></query>
+    </named-query>
+    <named-query name="Clients.bySurname">
+        <query><![CDATA[FROM Clients c where upper(cast(c.surname as string)) like concat('%', upper(?1), '%')]]></query>
+    </named-query>
+    <named-query name="Clients.byPatronymic">
+        <query><![CDATA[FROM Clients c where upper(cast(c.patronymic as string)) like concat('%', upper(?1), '%')]]></query>
+    </named-query>
+    <named-query name="Clients.byPhoneNumber">
+        <query><![CDATA[FROM Clients c where upper(cast(c.phoneNumber as string)) like concat('%', upper(?1), '%')]]></query>
+    </named-query>
+
+    <entity class="salon.Clients">
+        <table name="clients" schema="public" catalog="beauty_salon"/>
+        <attributes>
+            <id name="id">
+                <column name="id"/>
+            </id>
+            <basic name="name">
+                <column name="name"/>
+            </basic>
+            <basic name="surname">
+                <column name="surname"/>
+            </basic>
+            <basic name="patronymic">
+                <column name="patronymic"/>
+            </basic>
+            <basic name="phoneNumber">
+                <column name="phone_number"/>
+            </basic>
+            <one-to-many name="orderDatesById" mapped-by="clientsByClientId" target-entity="salon.OrderDate"/>
+        </attributes>
+    </entity>
+</entity-mappings>

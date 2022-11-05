@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="https://jakarta.ee/xml/ns/persistence/orm"
+                 version="3.0">
+
+    <entity class="salon.OrderDate">
+        <table name="order_date" schema="public" catalog="beauty_salon"/>
+        <attributes>
+            <id name="id">
+                <column name="id"/>
+            </id>
+            <basic name="orderDate">
+                <column name="order_date"/>
+            </basic>
+            <many-to-one name="clientsByClientId" optional="true" target-entity="salon.Clients">
+                <join-column name="client_id" nullable="false" referenced-column-name="id"/>
+            </many-to-one>
+            <many-to-one name="orderByOrderId" optional="true" target-entity="salon.Order">
+                <join-column name="order_id" nullable="false" referenced-column-name="id"/>
+            </many-to-one>
+        </attributes>
+    </entity>
+</entity-mappings>
