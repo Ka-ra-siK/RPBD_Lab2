@@ -19,6 +19,7 @@
         <attributes>
             <id name="id">
                 <column name="id"/>
+                <generated-value generator="increment"/>
             </id>
             <basic name="serviceName">
                 <column name="service_name"/>

@@ -7,6 +7,7 @@
         <attributes>
             <id name="id">
                 <column name="id"/>
+                <generated-value generator="increment"/>
             </id>
             <many-to-one name="mastersByMasterId" optional="true" target-entity="salon.Masters">
                 <join-column name="master_id" nullable="false" referenced-column-name="id"/>

@@ -1,11 +1,13 @@
 package cli;
 
 import find.*;
+import salon.MovingInformation;
 import salon.Order;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Date;
 
 public class CLI {
     private ClientsMapper clientsMapper;
@@ -16,9 +18,10 @@ public class CLI {
     private SpecializationMapper specializationMapper;
     private StaffMapper staffMapper;
 
-    public CLI() {
+    public CLI() throws IOException {
         createCLI();
     }
+
     public static String write() throws IOException {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(System.in));
@@ -26,7 +29,7 @@ public class CLI {
     }
 
 
-    private void createCLI() {
+    private void createCLI() throws IOException {
         clientsMapper = new ClientsMapper();
         mastersMapper = new MastersMapper();
         materialMapper = new MaterialMapper();
@@ -38,7 +41,7 @@ public class CLI {
         int answer = 0;
         int insideAnswer = 0;
 
-        while(isWorking){
+        while (isWorking) {
             chooseMainMenu();
             try {
                 answer = Integer.parseInt(write());
@@ -46,10 +49,10 @@ public class CLI {
                 throw new RuntimeException(e);
             }
 
-            switch (answer){
-                case 1:{ // MovingInformation
+            switch (answer) {
+                case 1: { // MovingInformation
                     boolean insideMenu = true;
-                    while (insideMenu){
+                    while (insideMenu) {
                         menuInsideMovingInformation();
                         try {
                             insideAnswer = Integer.parseInt(write());
@@ -57,16 +60,157 @@ public class CLI {
                             throw new RuntimeException(e);
                         }
 
-                        switch (insideAnswer){
-                            case 1:{
+                        switch (insideAnswer) {
+                            case 1: {
                                 var movingInformation = movingMapper.findAll();
                                 for (int i = 0; i < movingInformation.size(); i++) {
                                     System.out.println((i + 1) + ". " + movingInformation.get(i));
                                 }
                                 break;
-                            } //write moving information
-                            default:{
+                            } //Write moving information
+
+                            case 2: {
+                                MovingInformation movingInformation = new MovingInformation();
+                                System.out.println("Write position: ");
+                                movingInformation.setPosition(write());
+                                System.out.println("Write reason of transfer: ");
+                                movingInformation.setTransferReason(write());
+                                System.out.println("Write number of order: ");
+                                movingInformation.setOrderNumber(Integer.valueOf(write()));
+                                System.out.println("Write date of this order (yyyy-mm-dd): ");
+                                movingInformation.setOrderDate(Date.valueOf(write()));
+                                movingMapper.save(movingInformation);
+                                break;
+                            } //Add a moving information
+
+                            case 3: {
+                                var isEdit = true;
+                                var movingInformation = movingMapper.findAll();
+                                for (int i = 0; i < movingInformation.size(); i++) {
+                                    System.out.println((i + 1) + ". " + movingInformation.get(i));
+                                }
+                                System.out.print("What moving information you want to edit (0 to exit): ");
+                                int id = Integer.parseInt(write());
+                                if (id == 0)
+                                    break;
+                                MovingInformation movingInformationEdit = movingInformation.get(id - 1);
+                                while (isEdit) {
+                                    movingInformationEdit();
+                                    System.out.println("Write what are you want to edit: ");
+                                    int editKey = Integer.parseInt(write());
+                                    switch (editKey) {
+                                        case 1: {
+                                            System.out.println("Write new position: ");
+                                            movingInformationEdit.setPosition(write());
+                                            break;
+                                        } // edit Position
+                                        case 2: {
+                                            System.out.println("Write new transfer reason: ");
+                                            movingInformationEdit.setTransferReason(write());
+                                            break;
+                                        } // edit Transfer reason
+
+                                        case 3: {
+                                            System.out.println("Write new number of order: ");
+                                            movingInformationEdit.setOrderNumber(Integer.valueOf(write()));
+                                            break;
+                                        } // edit Order number
+
+                                        case 4: {
+                                            System.out.println("Write new date of order (yyyy-mm-dd): ");
+                                            movingInformationEdit.setOrderDate(Date.valueOf(write()));
+                                            break;
+                                        } // edit Date of order
+
+                                        default: {
+                                            isEdit = false;
+                                            break;
+                                        }
+                                    }
+
+                                }
+
+                                movingMapper.edit(movingInformationEdit);
+                                break;
+                            } // Edit a moving information
+
+                            case 4: {
+                                var movingInformation = movingMapper.findAll();
+                                for (int i = 0; i < movingInformation.size(); i++) {
+                                    System.out.println((i + 1) + ". " + movingInformation.get(i));
+                                }
+                                System.out.print("What moving information you want to delete (0 to exit): ");
+                                int id = Integer.parseInt(write());
+                                if (id == 0)
+                                    break;
+                                movingMapper.delete(movingInformation.get(id - 1));
+                                break;
+                            } //Delete moving information
+
+                            case 5: {
+                                boolean isFind = true;
+                                while (isFind) {
+                                    movingInformationFind();
+                                    System.out.println("Write what are you want to find: ");
+                                    int infoKey = Integer.parseInt(write());
+                                    /*
+                                    *  System.out.println("1. Position");
+                                        System.out.println("2. Transfer reason");
+                                        System.out.println("3. Order number");
+                                        System.out.println("4. Date of order");
+                                    * */
+                                    switch (infoKey) {
+                                        case 1: {
+                                            System.out.println("Write: ");
+                                            var movingInformationFind = movingMapper.findAllByPosition(write());
+                                            for (MovingInformation movingInformation : movingInformationFind) {
+                                                System.out.println(movingInformation);
+                                            }
+                                            break;
+                                        } // find Position
+
+                                        case 2: {
+                                            System.out.println("Write: ");
+                                            var movingInformationFind = movingMapper.findAllByTransferReason(write());
+                                            for (MovingInformation movingInformation : movingInformationFind) {
+                                                System.out.println(movingInformation);
+                                            }
+
+                                            break;
+                                        }//find Transfer reason
+
+                                        case 3: {
+                                            System.out.println("Write: ");
+                                            var movingInformationFind = movingMapper.findAllByOrderNumber(write());
+                                            for (MovingInformation movingInformation : movingInformationFind) {
+                                                System.out.println(movingInformation);
+                                            }
+
+                                            break;
+                                        }//find Order number
+
+                                        case 4: {
+                                            System.out.println("Write: ");
+                                            var movingInformationFind = movingMapper.findAlByOrderDate(write());
+                                            for (MovingInformation movingInformation : movingInformationFind) {
+                                                System.out.println(movingInformation);
+                                            }
+
+                                            break;
+                                        }//find ODate of order
+
+                                        default: {
+                                            isFind = false;
+                                            break;
+                                        }
+                                    }
+                                }
+                                break;
+
+                            } //  Find field in moving information
+                            default: {
                                 insideMenu = false;
+                                break;
                             }
                         }
 
@@ -74,9 +218,9 @@ public class CLI {
 
 
                 }
-                case 2:{ // Staff
+                case 2: { // Staff
                     boolean insideMenu = true;
-                    while (insideMenu){
+                    while (insideMenu) {
                         menuInsideStaff();
                         try {
                             insideAnswer = Integer.parseInt(write());
@@ -84,17 +228,18 @@ public class CLI {
                             throw new RuntimeException(e);
                         }
 
-                        switch (insideAnswer){
+                        switch (insideAnswer) {
                             //TODO
                         }
 
                     }
+                    break;
 
 
                 }
-                case 3:{ // Masters
+                case 3: { // Masters
                     boolean insideMenu = true;
-                    while (insideMenu){
+                    while (insideMenu) {
                         menuInsideMasters();
                         try {
                             insideAnswer = Integer.parseInt(write());
@@ -102,17 +247,17 @@ public class CLI {
                             throw new RuntimeException(e);
                         }
 
-                        switch (insideAnswer){
+                        switch (insideAnswer) {
                             //TODO
                         }
 
                     }
-
+                    break;
 
                 }
-                case 4:{ // Materials
+                case 4: { // Materials
                     boolean insideMenu = true;
-                    while (insideMenu){
+                    while (insideMenu) {
                         menuInsideMaterials();
                         try {
                             insideAnswer = Integer.parseInt(write());
@@ -120,17 +265,17 @@ public class CLI {
                             throw new RuntimeException(e);
                         }
 
-                        switch (insideAnswer){
+                        switch (insideAnswer) {
                             //TODO
                         }
 
                     }
-
+                    break;
 
                 }
-                case 5:{ // Specialization
+                case 5: { // Specialization
                     boolean insideMenu = true;
-                    while (insideMenu){
+                    while (insideMenu) {
                         menuInsideSpecialization();
                         try {
                             insideAnswer = Integer.parseInt(write());
@@ -138,17 +283,17 @@ public class CLI {
                             throw new RuntimeException(e);
                         }
 
-                        switch (insideAnswer){
+                        switch (insideAnswer) {
                             //TODO
                         }
 
                     }
 
-
+                    break;
                 }
-                case 6:{ // Order
+                case 6: { // Order
                     boolean insideMenu = true;
-                    while (insideMenu){
+                    while (insideMenu) {
                         menuInsideOrder();
                         try {
                             insideAnswer = Integer.parseInt(write());
@@ -156,17 +301,17 @@ public class CLI {
                             throw new RuntimeException(e);
                         }
 
-                        switch (insideAnswer){
+                        switch (insideAnswer) {
                             //TODO
                         }
 
                     }
-
+                    break;
 
                 }
-                case 7:{ // Client
+                case 7: { // Client
                     boolean insideMenu = true;
-                    while (insideMenu){
+                    while (insideMenu) {
                         menuInsideClients();
                         try {
                             insideAnswer = Integer.parseInt(write());
@@ -174,16 +319,17 @@ public class CLI {
                             throw new RuntimeException(e);
                         }
 
-                        switch (insideAnswer){
+                        switch (insideAnswer) {
                             //TODO
                         }
 
                     }
 
-
+                    break;
                 }
-                default:{
+                default: {
                     isWorking = false;
+                    break;
                 }
             }
         }
@@ -210,6 +356,24 @@ public class CLI {
         System.out.println("3. Edit a moving information");
         System.out.println("4. Delete moving information");
         System.out.println("5. Find field in moving information");
+        System.out.println("0. Back");
+    }
+
+    private void movingInformationEdit() {
+        System.out.println("What are you want to edit?");
+        System.out.println("1. Position");
+        System.out.println("2. Transfer reason");
+        System.out.println("3. Order number");
+        System.out.println("4. Date of order");
+        System.out.println("0. Back");
+    }
+
+    private void movingInformationFind() {
+        System.out.println("What are you want to find from?");
+        System.out.println("1. Position");
+        System.out.println("2. Transfer reason");
+        System.out.println("3. Order number");
+        System.out.println("4. Date of order");
         System.out.println("0. Back");
     }
 

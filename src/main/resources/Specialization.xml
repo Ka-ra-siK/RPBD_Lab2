@@ -14,6 +14,7 @@
         <attributes>
             <id name="id">
                 <column name="id"/>
+                <generated-value generator="increment"/>
             </id>
             <basic name="name">
                 <column name="name"/>

@@ -6,7 +6,7 @@
         <query><![CDATA[FROM Materials m]]></query>
     </named-query>
     <named-query name="Materials.byName">
-        <query><![CDATA[FROM Materials m where upper(cast(m.position as string)) like concat('%', upper(?1), '%')]]></query>
+        <query><![CDATA[FROM Materials m where upper(cast(m.name as string)) like concat('%', upper(?1), '%')]]></query>
     </named-query>
     <named-query name="Materials.byUnitMeasurement">
         <query><![CDATA[FROM Materials m where upper(cast(m.unitMeasurement as string)) like concat('%', upper(?1), '%')]]></query>
@@ -20,6 +20,7 @@
         <attributes>
             <id name="id">
                 <column name="id"/>
+                <generated-value generator="increment"/>
             </id>
             <basic name="name">
                 <column name="name"/>

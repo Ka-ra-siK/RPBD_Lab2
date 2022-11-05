@@ -15,12 +15,15 @@
         <query><![CDATA[FROM MovingInformation mi where upper(cast(mi.orderNumber as string)) like concat('%', upper(?1), '%')]]></query>
     </named-query>
 
+
     <entity class="salon.MovingInformation">
         <table name="moving_information" schema="public" catalog="beauty_salon"/>
         <attributes>
             <id name="id">
                 <column name="id"/>
+                <generated-value generator="increment"/>
             </id>
+
             <basic name="position">
                 <column name="position"/>
             </basic>

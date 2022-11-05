@@ -6,6 +6,8 @@
         <table name="masters_materials" schema="public" catalog="beauty_salon"/>
         <attributes>
             <id name="id">
+                <column name="id"/>
+                <generated-value generator="increment"/>
             </id>
             <basic name="quantity">
                 <column name="quantity"/>
