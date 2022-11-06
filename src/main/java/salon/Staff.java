@@ -2,6 +2,7 @@ package salon;
 
 import java.sql.Date;
 import java.util.Collection;
+import java.util.List;
 
 public class Staff {
     private int id;
@@ -12,7 +13,7 @@ public class Staff {
     private Date birthDate;
     private String position;
     private Integer salary;
-    private Collection<Masters> mastersById;
+    private List<Masters> mastersById;
     private MovingInformation movingInformationByMovingInformation;
 
     public int getId() {
@@ -112,11 +113,11 @@ public class Staff {
         return result;
     }
 
-    public Collection<Masters> getMastersById() {
+    public List<Masters> getMastersById() {
         return mastersById;
     }
 
-    public void setMastersById(Collection<Masters> mastersById) {
+    public void setMastersById(List<Masters> mastersById) {
         this.mastersById = mastersById;
     }
 
@@ -130,17 +131,12 @@ public class Staff {
 
     @Override
     public String toString() {
-        return "Staff{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", patronymic='" + patronymic + '\'' +
-                ", address='" + address + '\'' +
-                ", birthDate=" + birthDate +
-                ", position='" + position + '\'' +
-                ", salary=" + salary +
-                ", mastersById=" + mastersById +
-                ", movingInformationByMovingInformation=" + movingInformationByMovingInformation +
-                '}';
+        return surname +
+                " " + name +
+                " " + patronymic +
+                ", " + address +
+                ", " + birthDate +
+                ", " + position +
+                ", " + salary + " rub";
     }
 }

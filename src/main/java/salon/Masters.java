@@ -1,14 +1,13 @@
 package salon;
 
-import java.util.Collection;
+import java.util.List;
 
 public class Masters {
     private int id;
-    private String surname;
-    private Collection<MasterSpecialization> masterSpecializationsById;
+    private List<MasterSpecialization> masterSpecializationsById;
     private Staff staffByStaffId;
-    private Collection<MastersMaterials> mastersMaterialsById;
-    private Collection<Order> ordersById;
+    private List<MastersMaterials> mastersMaterialsById;
+    private List<Order> ordersById;
 
     public int getId() {
         return id;
@@ -18,13 +17,6 @@ public class Masters {
         this.id = id;
     }
 
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -34,7 +26,6 @@ public class Masters {
         Masters masters = (Masters) o;
 
         if (id != masters.id) return false;
-        if (surname != null ? !surname.equals(masters.surname) : masters.surname != null) return false;
 
         return true;
     }
@@ -42,15 +33,14 @@ public class Masters {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + (surname != null ? surname.hashCode() : 0);
         return result;
     }
 
-    public Collection<MasterSpecialization> getMasterSpecializationsById() {
+    public List<MasterSpecialization> getMasterSpecializationsById() {
         return masterSpecializationsById;
     }
 
-    public void setMasterSpecializationsById(Collection<MasterSpecialization> masterSpecializationsById) {
+    public void setMasterSpecializationsById(List<MasterSpecialization> masterSpecializationsById) {
         this.masterSpecializationsById = masterSpecializationsById;
     }
 
@@ -62,24 +52,49 @@ public class Masters {
         this.staffByStaffId = staffByStaffId;
     }
 
-    public Collection<MastersMaterials> getMastersMaterialsById() {
+    public List<MastersMaterials> getMastersMaterialsById() {
         return mastersMaterialsById;
     }
 
-    public void setMastersMaterialsById(Collection<MastersMaterials> mastersMaterialsById) {
+    public void setMastersMaterialsById(List<MastersMaterials> mastersMaterialsById) {
         this.mastersMaterialsById = mastersMaterialsById;
     }
 
-    public Collection<Order> getOrdersById() {
+    public List<Order> getOrdersById() {
         return ordersById;
     }
 
-    public void setOrdersById(Collection<Order> ordersById) {
+    public void setOrdersById(List<Order> ordersById) {
         this.ordersById = ordersById;
     }
 
     @Override
     public String toString() {
-        return surname;
+        String specializations = "Specializations: ";
+        int i = 1;
+        for (MasterSpecialization specialization :
+                masterSpecializationsById) {
+            specializations += "\n" + i + ") " + specialization.getSpecializationBySpecializationId().getName() + " ";
+            i += 1;
+        }
+
+        String materialsName = "Materials: ";
+        int j = 1;
+        for (MastersMaterials materials :
+                mastersMaterialsById) {
+            materialsName += "\n" + j + ") " +
+                    materials.getMaterialsByMaterialsId().getName() +
+                    " " + materials.getMaterialsByMaterialsId().getUnitMeasurement() +
+                    " " + materials.getQuantity() + " pieces";
+            j += 1;
+        }
+        specializations += "\n";
+        materialsName += "\n";
+
+        return staffByStaffId.getSurname() +
+                " " + staffByStaffId.getName() +
+                " " + staffByStaffId.getPatronymic() +
+                "\n" + specializations +
+                "\n" + materialsName;
     }
 }

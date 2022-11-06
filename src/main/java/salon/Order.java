@@ -76,6 +76,9 @@ public class Order {
     @Override
     public String toString() {
         return serviceName +
-                " " + servicePrice + " rub";
+                " " + servicePrice + " rub" +
+                ", " + mastersByMasterId.getStaffByStaffId().getSurname() +
+                " " + mastersByMasterId.getStaffByStaffId().getName() +
+                " " + mastersByMasterId.getStaffByStaffId().getPatronymic();
     }
 }

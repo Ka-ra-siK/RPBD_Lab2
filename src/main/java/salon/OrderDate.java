@@ -58,4 +58,10 @@ public class OrderDate {
     public void setOrderByOrderId(Order orderByOrderId) {
         this.orderByOrderId = orderByOrderId;
     }
+
+    @Override
+    public String toString() {
+        return  orderByOrderId.getServiceName() +
+                ", " + orderDate;
+    }
 }

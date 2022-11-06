@@ -2,6 +2,7 @@ package salon;
 
 import java.sql.Date;
 import java.util.Collection;
+import java.util.List;
 
 public class MovingInformation {
     private int id;
@@ -9,7 +10,7 @@ public class MovingInformation {
     private String transferReason;
     private Integer orderNumber;
     private Date orderDate;
-    private Collection<Staff> staffById;
+    private List<Staff> staffById;
 
     public int getId() {
         return id;
@@ -78,11 +79,11 @@ public class MovingInformation {
         return result;
     }
 
-    public Collection<Staff> getStaffById() {
+    public List<Staff> getStaffById() {
         return staffById;
     }
 
-    public void setStaffById(Collection<Staff> staffById) {
+    public void setStaffById(List<Staff> staffById) {
         this.staffById = staffById;
     }
 

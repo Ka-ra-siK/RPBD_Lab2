@@ -3,6 +3,7 @@ package find;
 import hibernate.HibernateUtils;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import salon.MovingInformation;
 import salon.Staff;
 
 import java.util.Date;
@@ -47,6 +48,10 @@ public class StaffMapper extends BaseMapper<Staff> {
 
     public List<Staff> findAllBySalary(Object salary) {
         return findByField(".bySalary", salary);
+    }
+
+    public List<Staff> findByMovingInformation(Object movingInformation){
+        return ((MovingInformation)movingInformation).getStaffById();
     }
 
 //    public List<Staff> findAllByMovingInformation(String transferReason) {

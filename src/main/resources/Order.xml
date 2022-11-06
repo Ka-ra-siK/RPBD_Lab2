@@ -12,8 +12,6 @@
         <query><![CDATA[FROM Order o where servicePrice = ?1]]></query>
     </named-query>
 
-
-
     <entity class="salon.Order">
         <table name="order" schema="public" catalog="beauty_salon"/>
         <attributes>

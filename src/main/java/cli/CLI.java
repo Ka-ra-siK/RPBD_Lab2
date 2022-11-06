@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Date;
 
-//TODO добавить множественные связи при добавлении
+
 public class CLI {
     private ClientsMapper clientsMapper;
     private MastersMapper mastersMapper;
@@ -17,6 +17,9 @@ public class CLI {
     private OrderMapper orderMapper;
     private SpecializationMapper specializationMapper;
     private StaffMapper staffMapper;
+    private MastersSpecializationMapper masterSpecializationMapper;
+    private MasterMaterialsMapper masterMaterialsMapper;
+    private OrderDateMapper orderDateMapper;
 
     public CLI() throws IOException {
         createCLI();
@@ -36,6 +39,9 @@ public class CLI {
         orderMapper = new OrderMapper();
         specializationMapper = new SpecializationMapper();
         staffMapper = new StaffMapper();
+        masterSpecializationMapper = new MastersSpecializationMapper();
+        masterMaterialsMapper = new MasterMaterialsMapper();
+        orderDateMapper = new OrderDateMapper();
         boolean isWorking = true;
         int answer = 0;
         int insideAnswer = 0;
@@ -253,6 +259,15 @@ public class CLI {
                                 staff.setPosition(write());
                                 System.out.println("Write salary of staff: ");
                                 staff.setSalary(Integer.valueOf(write()));
+
+                                var movingInformations = movingMapper.findAll();
+                                for (int i = 0; i < movingInformations.size(); i++) {
+                                    System.out.println((i + 1) + ". " + movingInformations.get(i).getTransferReason());
+                                }
+                                System.out.print("Write transfer reason: ");
+                                var movingInformation = movingInformations.get(Integer.parseInt(write()) - 1);
+                                staff.setMovingInformationByMovingInformation(movingInformation);
+
                                 staffMapper.save(staff);
                                 break;
                             } //Add a staff
@@ -453,8 +468,13 @@ public class CLI {
 
                             case 2: {
                                 Masters masters = new Masters();
-                                System.out.println("Write surname: ");
-                                masters.setSurname(write());
+                                var staffs = staffMapper.findAll();
+                                for (int i = 0; i < staffs.size(); i++) {
+                                    System.out.println((i + 1) + ". " + staffs.get(i));
+                                }
+                                System.out.print("Write staff number: ");
+                                var staff = staffs.get(Integer.parseInt(write()) - 1);
+                                masters.setStaffByStaffId(staff);
                                 mastersMapper.save(masters);
                                 break;
                             }//Save master
@@ -469,8 +489,16 @@ public class CLI {
                                 if (id == 0)
                                     break;
                                 Masters mastersEdit = masters.get(id - 1);
-                                System.out.println("Write new position: ");
-                                mastersEdit.setSurname(write());
+
+                                var staffs = staffMapper.findAll();
+                                for (int i = 0; i < staffs.size(); i++) {
+                                    System.out.println((i + 1) + ". " + staffs.get(i).getSurname() +
+                                            staffs.get(i).getName() + staffs.get(i).getPatronymic() + staffs.get(i).getPosition());
+                                }
+                                System.out.print("Choose staff: ");
+                                var staff = staffs.get(Integer.parseInt(write()) - 1);
+                                mastersEdit.setStaffByStaffId(staff);
+
                                 mastersMapper.edit(mastersEdit);
                                 break;
                             } // Edit master
@@ -497,11 +525,20 @@ public class CLI {
 
                                     switch (infoKey) {
                                         case 1: {
-                                            System.out.println("Write: ");
-                                            var masterFind = mastersMapper.findAllBySurname(write());
-                                            for (Masters masters : masterFind) {
-                                                System.out.println(masters);
+
+                                            var staffs = staffMapper.findAll();
+                                            for (int i = 0; i < staffs.size(); i++) {
+                                                System.out.println((i + 1) + ". " + staffs.get(i));
                                             }
+                                            System.out.println("Choose staff: ");
+                                            Staff staff = staffs.get(Integer.parseInt(write()) - 1);
+
+                                            var masters = mastersMapper.findByStaff(staff);
+                                            for (Masters master :
+                                                    masters) {
+                                                System.out.println(master);
+                                            }
+
                                             break;
                                         } // find surname
 
@@ -513,12 +550,86 @@ public class CLI {
                                 }
                                 break;
                             }
+
+                            case 6:{
+                                MasterSpecialization masterSpecialization = new MasterSpecialization();
+
+                                var specializations = specializationMapper.findAll();
+                                for (int i = 0; i < specializations.size(); i++) {
+                                    System.out.println((i + 1) + ". " + specializations.get(i));
+                                }
+                                System.out.print("Write specialization number: ");
+                                var specialization = specializations.get(Integer.parseInt(write()) - 1);
+                                masterSpecialization.setSpecializationBySpecializationId(specialization);
+
+
+                                var masters = mastersMapper.findAll();
+                                for (int i = 0; i < masters.size(); i++) {
+                                    System.out.println((i + 1) + ". " + masters.get(i));
+                                }
+                                System.out.print("Write masters number: ");
+                                var master = masters.get(Integer.parseInt(write()) - 1);
+                                masterSpecialization.setMastersByMasterId(master);
+
+                                masterSpecializationMapper.save(masterSpecialization);
+
+                                break;
+                            }//add specialization
+
+                            case 7:{
+                                var masterSpecialization = masterSpecializationMapper.findAll();
+                                for (int i = 0; i < masterSpecialization.size(); i++) {
+                                    System.out.println((i + 1) + ". " + masterSpecialization.get(i));
+                                }
+                                System.out.print("What master's specialization you want to delete (0 to exit): ");
+                                int id = Integer.parseInt(write());
+                                if (id == 0)
+                                    break;
+                                masterSpecializationMapper.delete(masterSpecialization.get(id - 1));
+                                break;
+                            }//dell specialization
+
+                            case 8:{
+                                MastersMaterials mastersMaterials = new MastersMaterials();
+                                var materials = materialMapper.findAll();
+                                for (int i = 0; i < materials.size(); i++) {
+                                    System.out.println((i + 1) + ". " + materials.get(i));
+                                }
+                                System.out.print("Write materials number: ");
+                                var material = materials.get(Integer.parseInt(write()) - 1);
+                                mastersMaterials.setMaterialsByMaterialsId(material);
+                                var masters = mastersMapper.findAll();
+                                for (int i = 0; i < masters.size(); i++) {
+                                    System.out.println((i + 1) + ". " + masters.get(i));
+                                }
+                                System.out.print("Write masters number: ");
+                                var master = masters.get(Integer.parseInt(write()) - 1);
+                                mastersMaterials.setMastersByMastersId(master);
+                                System.out.println("Write quantity: ");
+                                mastersMaterials.setQuantity(Integer.parseInt(write()));
+                                masterMaterialsMapper.save(mastersMaterials);
+
+                                break;
+                            }//add material
+
+                            case 9:{
+                                var masterMaterials = masterMaterialsMapper.findAll();
+                                for (int i = 0; i < masterMaterials.size(); i++) {
+                                    System.out.println((i + 1) + ". " + masterMaterials.get(i));
+                                }
+                                System.out.print("What master's materials you want to delete (0 to exit): ");
+                                int id = Integer.parseInt(write());
+                                if (id == 0)
+                                    break;
+                                masterMaterialsMapper.delete(masterMaterials.get(id - 1));
+                                break;
+                            }//remove material
+
                             default: {
                                 insideMenu = false;
                                 break;
                             }
                         }
-
                     }
                     break;
 
@@ -534,7 +645,7 @@ public class CLI {
                         }
 
                         switch (insideAnswer) {
-                            case 1:{
+                            case 1: {
                                 var materials = materialMapper.findAll();
                                 for (int i = 0; i < materials.size(); i++) {
                                     System.out.println((i + 1) + ". " + materials.get(i));
@@ -542,7 +653,7 @@ public class CLI {
                                 break;
                             } //Write Materials
 
-                            case 2:{
+                            case 2: {
                                 Materials materials = new Materials();
                                 System.out.println("Write name of material: ");
                                 materials.setName(write());
@@ -554,7 +665,7 @@ public class CLI {
                                 break;
                             } //Add a Materials
 
-                            case 3:{
+                            case 3: {
                                 var isEdit = true;
                                 var materials = materialMapper.findAll();
                                 for (int i = 0; i < materials.size(); i++) {
@@ -566,7 +677,7 @@ public class CLI {
                                     break;
                                 Materials materialEdit = materials.get(id - 1);
 
-                                while (isEdit){
+                                while (isEdit) {
                                     materialsEdit();
                                     System.out.println("Write what are you want to edit: ");
                                     int editKey = Integer.parseInt(write());
@@ -598,7 +709,7 @@ public class CLI {
                                 break;
                             } //Edit Material
 
-                            case 4:{
+                            case 4: {
                                 var materials = materialMapper.findAll();
                                 for (int i = 0; i < materials.size(); i++) {
                                     System.out.println((i + 1) + ". " + materials.get(i));
@@ -611,7 +722,7 @@ public class CLI {
                                 break;
                             } //Delete Material
 
-                            case 5:{
+                            case 5: {
                                 boolean isFind = true;
                                 while (isFind) {
                                     materialsFind();
@@ -619,7 +730,7 @@ public class CLI {
                                     int infoKey = Integer.parseInt(write());
                                     switch (infoKey) {
 
-                                        case 1:{
+                                        case 1: {
                                             System.out.println("Write: ");
                                             var materialFind = materialMapper.findAllByNameMaterial(write());
                                             for (Materials materials : materialFind) {
@@ -628,7 +739,7 @@ public class CLI {
                                             break;
                                         } //find name
 
-                                        case 2:{
+                                        case 2: {
                                             System.out.println("Write: ");
                                             var materialFind = materialMapper.findAllByUnitMeasurement(write());
                                             for (Materials materials : materialFind) {
@@ -637,7 +748,7 @@ public class CLI {
                                             break;
                                         } //find unit mesurement
 
-                                        case 3:{
+                                        case 3: {
                                             System.out.println("Write: ");
                                             var materialFind = materialMapper.findAllByCost(write());
                                             for (Materials materials : materialFind) {
@@ -677,7 +788,7 @@ public class CLI {
                         }
 
                         switch (insideAnswer) {
-                            case 1:{
+                            case 1: {
                                 var specialization = specializationMapper.findAll();
                                 for (int i = 0; i < specialization.size(); i++) {
                                     System.out.println((i + 1) + ". " + specialization.get(i));
@@ -685,7 +796,7 @@ public class CLI {
                                 break;
                             } //Write Specialization
 
-                            case 2:{
+                            case 2: {
                                 Specialization specialization = new Specialization();
                                 System.out.println("Write Specialization");
                                 specialization.setName(write());
@@ -693,7 +804,7 @@ public class CLI {
                                 break;
                             } //Add Specialization
 
-                            case 3:{
+                            case 3: {
                                 var specialization = specializationMapper.findAll();
                                 for (int i = 0; i < specialization.size(); i++) {
                                     System.out.println((i + 1) + ". " + specialization.get(i));
@@ -710,7 +821,7 @@ public class CLI {
                             } //Edit Specialization
 
 
-                            case 4:{
+                            case 4: {
                                 var specialization = specializationMapper.findAll();
                                 for (int i = 0; i < specialization.size(); i++) {
                                     System.out.println((i + 1) + ". " + specialization.get(i));
@@ -725,7 +836,7 @@ public class CLI {
                             } //Delete Specialization
 
 
-                            case 5:{
+                            case 5: {
                                 boolean isFind = true;
                                 while (isFind) {
                                     specializationFind();
@@ -771,7 +882,7 @@ public class CLI {
                         }
 
                         switch (insideAnswer) {
-                            case 1:{
+                            case 1: {
                                 var order = orderMapper.findAll();
                                 for (int i = 0; i < order.size(); i++) {
                                     System.out.println((i + 1) + ". " + order.get(i));
@@ -779,17 +890,28 @@ public class CLI {
                                 break;
                             }//list order
 
-                            case 2:{
+                            case 2: {
                                 Order order = new Order();
                                 System.out.println("Write name of service");
                                 order.setServiceName(write());
                                 System.out.println("Write price of service");
                                 order.setServicePrice(Integer.valueOf(write()));
+
+                                var masters = mastersMapper.findAll();
+                                for (int i = 0; i < masters.size(); i++) {
+                                    System.out.println((i + 1) + ". " + masters.get(i).getStaffByStaffId().getSurname() + " "
+                                            + masters.get(i).getStaffByStaffId().getName() + " "
+                                            + masters.get(i).getStaffByStaffId().getPatronymic());
+                                }
+                                System.out.print("Write master: ");
+                                var master = masters.get(Integer.parseInt(write()) - 1);
+                                order.setMastersByMasterId(master);
+
                                 orderMapper.save(order);
                                 break;
                             } //add order
 
-                            case 3:{
+                            case 3: {
                                 var isEdit = true;
                                 var order = orderMapper.findAll();
                                 for (int i = 0; i < order.size(); i++) {
@@ -806,13 +928,13 @@ public class CLI {
                                     int editKey = Integer.parseInt(write());
                                     switch (editKey) {
 
-                                        case 1:{
+                                        case 1: {
                                             System.out.println("Write new service name: ");
                                             orderEdit.setServiceName(write());
                                             break;
                                         } //Edit name
 
-                                        case 2:{
+                                        case 2: {
                                             System.out.println("Write new price of service: ");
                                             orderEdit.setServicePrice(Integer.valueOf(write()));
                                             break;
@@ -829,7 +951,7 @@ public class CLI {
                                 break;
                             } // edit order
 
-                            case 4:{
+                            case 4: {
                                 var order = orderMapper.findAll();
                                 for (int i = 0; i < order.size(); i++) {
                                     System.out.println((i + 1) + ". " + order.get(i));
@@ -842,14 +964,14 @@ public class CLI {
                                 break;
                             } //delete order
 
-                            case 5:{
+                            case 5: {
                                 boolean isFind = true;
                                 while (isFind) {
                                     orderFind();
                                     System.out.println("Write what are you want to find: ");
                                     int infoKey = Integer.parseInt(write());
                                     switch (infoKey) {
-                                        case 1:{
+                                        case 1: {
                                             System.out.println("Write: ");
                                             var orderFind = orderMapper.findAllByServiceName(write());
                                             for (Order order : orderFind) {
@@ -858,7 +980,7 @@ public class CLI {
                                             break;
                                         } //find by name
 
-                                        case 2:{
+                                        case 2: {
                                             System.out.println("Write: ");
                                             var orderFind = orderMapper.findAllByServicePrice(write());
                                             for (Order order : orderFind) {
@@ -898,7 +1020,7 @@ public class CLI {
                         }
 
                         switch (insideAnswer) {
-                            case 1:{
+                            case 1: {
                                 var clients = clientsMapper.findAll();
                                 for (int i = 0; i < clients.size(); i++) {
                                     System.out.println((i + 1) + ". " + clients.get(i));
@@ -906,7 +1028,7 @@ public class CLI {
                                 break;
                             } //list of clients
 
-                            case 2:{
+                            case 2: {
                                 Clients clients = new Clients();
                                 System.out.println("Write surname of client: ");
                                 clients.setSurname(write());
@@ -916,11 +1038,12 @@ public class CLI {
                                 clients.setPatronymic(write());
                                 System.out.println("Write phone number of client: ");
                                 clients.setPhoneNumber(write());
+
                                 clientsMapper.save(clients);
                                 break;
                             } // add client
 
-                            case 3:{
+                            case 3: {
                                 var isEdit = true;
                                 var client = clientsMapper.findAll();
                                 for (int i = 0; i < client.size(); i++) {
@@ -935,27 +1058,27 @@ public class CLI {
                                     clientEdit();
                                     System.out.println("Write what are you want to edit: ");
                                     int editKey = Integer.parseInt(write());
-                                    switch (editKey){
+                                    switch (editKey) {
 
-                                        case 1:{
+                                        case 1: {
                                             System.out.println("Write new surname: ");
                                             clientEdit.setSurname(write());
                                             break;
                                         }//edit surname
 
-                                        case 2:{
+                                        case 2: {
                                             System.out.println("Write new name: ");
                                             clientEdit.setName(write());
                                             break;
                                         } //edit name
 
-                                        case 3:{
+                                        case 3: {
                                             System.out.println("Write new patronymic: ");
                                             clientEdit.setPatronymic(write());
                                             break;
                                         } //edit patronymic
 
-                                        case 4:{
+                                        case 4: {
                                             System.out.println("Write new phone number of client: ");
                                             clientEdit.setPhoneNumber(write());
                                             break;
@@ -971,7 +1094,7 @@ public class CLI {
                                 break;
                             } // edit client
 
-                            case 4:{
+                            case 4: {
                                 var client = clientsMapper.findAll();
                                 for (int i = 0; i < client.size(); i++) {
                                     System.out.println((i + 1) + ". " + client.get(i));
@@ -984,7 +1107,7 @@ public class CLI {
                                 break;
                             } //delete client
 
-                            case 5:{
+                            case 5: {
                                 boolean isFind = true;
                                 while (isFind) {
                                     clientFind();
@@ -992,7 +1115,7 @@ public class CLI {
                                     int infoKey = Integer.parseInt(write());
                                     switch (infoKey) {
 
-                                        case 1:{
+                                        case 1: {
                                             System.out.println("Write: ");
                                             var clientFind = clientsMapper.findAllBySurname(write());
                                             for (Clients clients : clientFind) {
@@ -1001,7 +1124,7 @@ public class CLI {
                                             break;
                                         } // find by surname
 
-                                        case 2:{
+                                        case 2: {
                                             System.out.println("Write: ");
                                             var clientFind = clientsMapper.findAllByName(write());
                                             for (Clients clients : clientFind) {
@@ -1010,7 +1133,7 @@ public class CLI {
                                             break;
                                         } //find by name
 
-                                        case 3:{
+                                        case 3: {
                                             System.out.println("Write: ");
                                             var clientFind = clientsMapper.findAllByPatronymic(write());
                                             for (Clients clients : clientFind) {
@@ -1019,7 +1142,7 @@ public class CLI {
                                             break;
                                         } //find by partonymic
 
-                                        case 4:{
+                                        case 4: {
                                             System.out.println("Write: ");
                                             var clientFind = clientsMapper.findAllByPhoneNumber(write());
                                             for (Clients clients : clientFind) {
@@ -1036,6 +1159,44 @@ public class CLI {
                                 }
                                 break;
                             } //find client
+
+                            case 6:{
+                                OrderDate orderDate = new OrderDate();
+
+                                var orders = orderMapper.findAll();
+                                for (int i = 0; i < orders.size(); i++) {
+                                    System.out.println((i + 1) + ". " + orders.get(i));
+                                }
+                                System.out.print("Write order's number: ");
+                                var order = orders.get(Integer.parseInt(write()) - 1);
+                                orderDate.setOrderByOrderId(order);
+
+
+                                var clients = clientsMapper.findAll();
+                                for (int i = 0; i < clients.size(); i++) {
+                                    System.out.println((i + 1) + ". " + clients.get(i));
+                                }
+                                System.out.print("Write client's number: ");
+                                var client = clients.get(Integer.parseInt(write()) - 1);
+                                orderDate.setClientsByClientId(client);
+
+                                orderDateMapper.save(orderDate);
+
+                                break;
+                            } // add order to client
+
+                            case 7:{
+                                var orderDate = orderDateMapper.findAll();
+                                for (int i = 0; i < orderDate.size(); i++) {
+                                    System.out.println((i + 1) + ". " + orderDate.get(i));
+                                }
+                                System.out.print("What order you want to delete from client (0 to exit): ");
+                                int id = Integer.parseInt(write());
+                                if (id == 0)
+                                    break;
+                                orderDateMapper.delete(orderDate.get(id - 1));
+                                break;
+                            } // remove order from client
 
                             default: {
                                 insideMenu = false;
@@ -1136,12 +1297,16 @@ public class CLI {
         System.out.println("3. Edit a master");
         System.out.println("4. Delete master");
         System.out.println("5. Find field in master");
+        System.out.println("6. Add specialization to master");
+        System.out.println("7. Remove specialization from master");
+        System.out.println("8. Add materials to master");
+        System.out.println("9. Remove materials from master");
         System.out.println("0. Back");
     }
 
     private void mastersFind() {
         System.out.println("What are you want to find from?");
-        System.out.println("1. Surname");
+        System.out.println("1. Staff");
         System.out.println("0. Back");
     }
 
@@ -1218,6 +1383,9 @@ public class CLI {
         System.out.println("3. Edit a client");
         System.out.println("4. Delete client");
         System.out.println("5. Find field in client");
+        System.out.println("6. Add order to client");
+        System.out.println("6. Remove order from client");
+
         System.out.println("0. Back");
     }
 

@@ -1,11 +1,12 @@
 package salon;
 
 import java.util.Collection;
+import java.util.List;
 
 public class Specialization {
     private int id;
     private String name;
-    private Collection<MasterSpecialization> masterSpecializationsById;
+    private List<MasterSpecialization> masterSpecializationsById;
 
     public int getId() {
         return id;
@@ -43,11 +44,11 @@ public class Specialization {
         return result;
     }
 
-    public Collection<MasterSpecialization> getMasterSpecializationsById() {
+    public List<MasterSpecialization> getMasterSpecializationsById() {
         return masterSpecializationsById;
     }
 
-    public void setMasterSpecializationsById(Collection<MasterSpecialization> masterSpecializationsById) {
+    public void setMasterSpecializationsById(List<MasterSpecialization> masterSpecializationsById) {
         this.masterSpecializationsById = masterSpecializationsById;
     }
 

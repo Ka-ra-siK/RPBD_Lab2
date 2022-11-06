@@ -1,13 +1,14 @@
 package salon;
 
 import java.util.Collection;
+import java.util.List;
 
 public class Materials {
     private int id;
     private String name;
     private String unitMeasurement;
     private Integer cost;
-    private Collection<MastersMaterials> mastersMaterialsById;
+    private List<MastersMaterials> mastersMaterialsById;
 
     public int getId() {
         return id;
@@ -66,11 +67,11 @@ public class Materials {
         return result;
     }
 
-    public Collection<MastersMaterials> getMastersMaterialsById() {
+    public List<MastersMaterials> getMastersMaterialsById() {
         return mastersMaterialsById;
     }
 
-    public void setMastersMaterialsById(Collection<MastersMaterials> mastersMaterialsById) {
+    public void setMastersMaterialsById(List<MastersMaterials> mastersMaterialsById) {
         this.mastersMaterialsById = mastersMaterialsById;
     }
 

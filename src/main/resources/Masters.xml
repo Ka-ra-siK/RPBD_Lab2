@@ -5,9 +5,6 @@
     <named-query name="Masters.all">
         <query><![CDATA[FROM Masters m]]></query>
     </named-query>
-    <named-query name="Masters.bySurname">
-        <query><![CDATA[FROM Masters m where upper(cast(m.surname as string)) like concat('%', upper(?1), '%')]]></query>
-    </named-query>
 
     <entity class="salon.Masters">
         <table name="masters" schema="public" catalog="beauty_salon"/>
@@ -16,9 +13,6 @@
                 <column name="id"/>
                 <generated-value generator="increment"/>
             </id>
-            <basic name="surname">
-                <column name="surname"/>
-            </basic>
             <many-to-one name="staffByStaffId" optional="true" target-entity="salon.Staff">
                 <join-column name="staff_id" nullable="false" referenced-column-name="id"/>
             </many-to-one>

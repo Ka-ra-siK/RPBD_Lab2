@@ -57,4 +57,9 @@ public class MastersMaterials {
     public void setMaterialsByMaterialsId(Materials materialsByMaterialsId) {
         this.materialsByMaterialsId = materialsByMaterialsId;
     }
+
+    @Override
+    public String toString() {
+        return  materialsByMaterialsId.getName() + ", " + quantity;
+    }
 }

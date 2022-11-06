@@ -3,7 +3,9 @@ package find;
 import hibernate.HibernateUtils;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import salon.Masters;
 import salon.Order;
+import salon.Staff;
 
 import java.util.List;
 
@@ -21,15 +23,9 @@ public class OrderMapper extends BaseMapper<Order> {
         return findByField(".byServicePrice", servicePrice);
     }
 
-//    public List<Order> findAllByMastersSurname(String surname) {
-//        String hql = String.format("Select O From %s O join O.Masters M where M.surname like :surname", getTableName());
-//        Session session = HibernateUtils.getSessionFactory().openSession();
-//        Query<Order> query = session.createQuery(hql, getType());
-//        query.setParameter("surname", "%" + surname + "%");
-//        List<Order> list = query.list();
-//        session.close();
-//        return list;
-//    }
+    public List<Order> findByMaters(Object master){
+        return ((Masters)master).getOrdersById();
+    }
 
     @Override
     protected Class<Order> getType() {

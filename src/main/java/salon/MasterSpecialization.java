@@ -43,4 +43,9 @@ public class MasterSpecialization {
     public void setSpecializationBySpecializationId(Specialization specializationBySpecializationId) {
         this.specializationBySpecializationId = specializationBySpecializationId;
     }
+
+    @Override
+    public String toString() {
+        return specializationBySpecializationId.getName();
+    }
 }
