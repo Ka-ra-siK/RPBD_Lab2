@@ -8,5 +8,16 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/beauty_salon</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="default/Hibernate" uuid="89c35c69-a04d-404a-a4dd-ce42740d9ab0">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>Hibernate
+
+C:/Users/polka/OneDrive/Рабочий стол/7 семак/Разработка приложений БД/Lab_2_Hibernate/src/main/resources/META-INF/persistence.xml</remarks>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/beauty_salon</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

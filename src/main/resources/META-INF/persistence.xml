@@ -14,7 +14,6 @@
         <mapping-file>OrderDate.xml</mapping-file>
         <mapping-file>Specialization.xml</mapping-file>
         <mapping-file>Staff.xml</mapping-file>
-        <class>salon.MovingInformation</class>
         <properties>
             <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/beauty_salon"/>
             <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
@@ -22,7 +21,6 @@
             <property name="hibernate.connection.password" value="1"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
-
         </properties>
     </persistence-unit>
 </persistence>
