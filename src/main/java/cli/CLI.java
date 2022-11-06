@@ -28,7 +28,6 @@ public class CLI {
         return reader.readLine();
     }
 
-
     private void createCLI() throws IOException {
         clientsMapper = new ClientsMapper();
         mastersMapper = new MastersMapper();
@@ -198,7 +197,7 @@ public class CLI {
                                             }
 
                                             break;
-                                        }//find ODate of order
+                                        }//find Date of order
 
                                         default: {
                                             isFind = false;
@@ -772,7 +771,116 @@ public class CLI {
                         }
 
                         switch (insideAnswer) {
-                            //TODO
+                            case 1:{
+                                var order = orderMapper.findAll();
+                                for (int i = 0; i < order.size(); i++) {
+                                    System.out.println((i + 1) + ". " + order.get(i));
+                                }
+                                break;
+                            }//list order
+
+                            case 2:{
+                                Order order = new Order();
+                                System.out.println("Write name of service");
+                                order.setServiceName(write());
+                                System.out.println("Write price of service");
+                                order.setServicePrice(Integer.valueOf(write()));
+                                orderMapper.save(order);
+                                break;
+                            } //add order
+
+                            case 3:{
+                                var isEdit = true;
+                                var order = orderMapper.findAll();
+                                for (int i = 0; i < order.size(); i++) {
+                                    System.out.println((i + 1) + ". " + order.get(i));
+                                }
+                                System.out.print("What order you want to edit (0 to exit): ");
+                                int id = Integer.parseInt(write());
+                                if (id == 0)
+                                    break;
+                                Order orderEdit = order.get(id - 1);
+                                while (isEdit) {
+                                    orderEdit();
+                                    System.out.println("Write what are you want to edit: ");
+                                    int editKey = Integer.parseInt(write());
+                                    switch (editKey) {
+
+                                        case 1:{
+                                            System.out.println("Write new service name: ");
+                                            orderEdit.setServiceName(write());
+                                            break;
+                                        } //Edit name
+
+                                        case 2:{
+                                            System.out.println("Write new price of service: ");
+                                            orderEdit.setServicePrice(Integer.valueOf(write()));
+                                            break;
+                                        } // edit price
+
+                                        default: {
+                                            isEdit = false;
+                                            break;
+                                        }
+                                    }
+
+                                }
+                                orderMapper.edit(orderEdit);
+                                break;
+                            } // edit order
+
+                            case 4:{
+                                var order = orderMapper.findAll();
+                                for (int i = 0; i < order.size(); i++) {
+                                    System.out.println((i + 1) + ". " + order.get(i));
+                                }
+                                System.out.print("What order you want to delete (0 to exit): ");
+                                int id = Integer.parseInt(write());
+                                if (id == 0)
+                                    break;
+                                orderMapper.delete(order.get(id - 1));
+                                break;
+                            } //delete order
+
+                            case 5:{
+                                boolean isFind = true;
+                                while (isFind) {
+                                    orderFind();
+                                    System.out.println("Write what are you want to find: ");
+                                    int infoKey = Integer.parseInt(write());
+                                    switch (infoKey) {
+                                        case 1:{
+                                            System.out.println("Write: ");
+                                            var orderFind = orderMapper.findAllByServiceName(write());
+                                            for (Order order : orderFind) {
+                                                System.out.println(order);
+                                            }
+                                            break;
+                                        } //find by name
+
+                                        case 2:{
+                                            System.out.println("Write: ");
+                                            var orderFind = orderMapper.findAllByServicePrice(write());
+                                            for (Order order : orderFind) {
+                                                System.out.println(order);
+                                            }
+                                            break;
+                                        } //find by price
+
+                                        default: {
+                                            isFind = false;
+                                            break;
+                                        }
+                                    }
+
+                                }
+                                break;
+                            } //edit order
+
+                            default: {
+                                insideMenu = false;
+                                break;
+                            }
                         }
 
                     }
@@ -790,11 +898,151 @@ public class CLI {
                         }
 
                         switch (insideAnswer) {
-                            //TODO
+                            case 1:{
+                                var clients = clientsMapper.findAll();
+                                for (int i = 0; i < clients.size(); i++) {
+                                    System.out.println((i + 1) + ". " + clients.get(i));
+                                }
+                                break;
+                            } //list of clients
+
+                            case 2:{
+                                Clients clients = new Clients();
+                                System.out.println("Write surname of client: ");
+                                clients.setSurname(write());
+                                System.out.println("Write name of client: ");
+                                clients.setName(write());
+                                System.out.println("Write patronymic of client: ");
+                                clients.setPatronymic(write());
+                                System.out.println("Write phone number of client: ");
+                                clients.setPhoneNumber(write());
+                                clientsMapper.save(clients);
+                                break;
+                            } // add client
+
+                            case 3:{
+                                var isEdit = true;
+                                var client = clientsMapper.findAll();
+                                for (int i = 0; i < client.size(); i++) {
+                                    System.out.println((i + 1) + ". " + client.get(i));
+                                }
+                                System.out.print("What client you want to edit (0 to exit): ");
+                                int id = Integer.parseInt(write());
+                                if (id == 0)
+                                    break;
+                                Clients clientEdit = client.get(id - 1);
+                                while (isEdit) {
+                                    clientEdit();
+                                    System.out.println("Write what are you want to edit: ");
+                                    int editKey = Integer.parseInt(write());
+                                    switch (editKey){
+
+                                        case 1:{
+                                            System.out.println("Write new surname: ");
+                                            clientEdit.setSurname(write());
+                                            break;
+                                        }//edit surname
+
+                                        case 2:{
+                                            System.out.println("Write new name: ");
+                                            clientEdit.setName(write());
+                                            break;
+                                        } //edit name
+
+                                        case 3:{
+                                            System.out.println("Write new patronymic: ");
+                                            clientEdit.setPatronymic(write());
+                                            break;
+                                        } //edit patronymic
+
+                                        case 4:{
+                                            System.out.println("Write new phone number of client: ");
+                                            clientEdit.setPhoneNumber(write());
+                                            break;
+                                        } //edit phone number
+
+                                        default: {
+                                            isEdit = false;
+                                            break;
+                                        }
+                                    }
+                                }
+                                clientsMapper.edit(clientEdit);
+                                break;
+                            } // edit client
+
+                            case 4:{
+                                var client = clientsMapper.findAll();
+                                for (int i = 0; i < client.size(); i++) {
+                                    System.out.println((i + 1) + ". " + client.get(i));
+                                }
+                                System.out.print("What client you want to delete (0 to exit): ");
+                                int id = Integer.parseInt(write());
+                                if (id == 0)
+                                    break;
+                                clientsMapper.delete(client.get(id - 1));
+                                break;
+                            } //delete client
+
+                            case 5:{
+                                boolean isFind = true;
+                                while (isFind) {
+                                    clientFind();
+                                    System.out.println("Write what are you want to find: ");
+                                    int infoKey = Integer.parseInt(write());
+                                    switch (infoKey) {
+
+                                        case 1:{
+                                            System.out.println("Write: ");
+                                            var clientFind = clientsMapper.findAllBySurname(write());
+                                            for (Clients clients : clientFind) {
+                                                System.out.println(clients);
+                                            }
+                                            break;
+                                        } // find by surname
+
+                                        case 2:{
+                                            System.out.println("Write: ");
+                                            var clientFind = clientsMapper.findAllByName(write());
+                                            for (Clients clients : clientFind) {
+                                                System.out.println(clients);
+                                            }
+                                            break;
+                                        } //find by name
+
+                                        case 3:{
+                                            System.out.println("Write: ");
+                                            var clientFind = clientsMapper.findAllByPatronymic(write());
+                                            for (Clients clients : clientFind) {
+                                                System.out.println(clients);
+                                            }
+                                            break;
+                                        } //find by partonymic
+
+                                        case 4:{
+                                            System.out.println("Write: ");
+                                            var clientFind = clientsMapper.findAllByPhoneNumber(write());
+                                            for (Clients clients : clientFind) {
+                                                System.out.println(clients);
+                                            }
+                                            break;
+                                        } //find by phone number
+
+                                        default: {
+                                            isFind = false;
+                                            break;
+                                        }
+                                    }
+                                }
+                                break;
+                            } //find client
+
+                            default: {
+                                insideMenu = false;
+                                break;
+                            }
                         }
-
                     }
-
                     break;
                 }
                 default: {
@@ -949,6 +1197,20 @@ public class CLI {
         System.out.println("0. Back");
     }
 
+    private void orderEdit() {
+        System.out.println("What are you want to edit?");
+        System.out.println("1. Name of service");
+        System.out.println("2. Price of service");
+        System.out.println("0. Back");
+    }
+
+    private void orderFind() {
+        System.out.println("What are you want to find?");
+        System.out.println("1. Name of service");
+        System.out.println("2. Price of service");
+        System.out.println("0. Back");
+    }
+
     private void menuInsideClients() {
         System.out.println("Clients");
         System.out.println("1. List all clients");
@@ -956,6 +1218,24 @@ public class CLI {
         System.out.println("3. Edit a client");
         System.out.println("4. Delete client");
         System.out.println("5. Find field in client");
+        System.out.println("0. Back");
+    }
+
+    private void clientEdit() {
+        System.out.println("What are you want to edit?");
+        System.out.println("1. Surname of client");
+        System.out.println("2. Name of client");
+        System.out.println("3. Patronymic of client");
+        System.out.println("4. Phone number of client");
+        System.out.println("0. Back");
+    }
+
+    private void clientFind() {
+        System.out.println("What are you want to find?");
+        System.out.println("1. Surname of client");
+        System.out.println("2. Name of client");
+        System.out.println("3. Patronymic of client");
+        System.out.println("4. Phone number of client");
         System.out.println("0. Back");
     }
 }

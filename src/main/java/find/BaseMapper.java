@@ -4,11 +4,6 @@ import hibernate.HibernateUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
-
-import javax.swing.text.html.parser.Entity;
 import java.util.List;
 
 public abstract class BaseMapper <T>{
