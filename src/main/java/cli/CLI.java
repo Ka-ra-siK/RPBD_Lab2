@@ -1180,6 +1180,9 @@ public class CLI {
                                 var client = clients.get(Integer.parseInt(write()) - 1);
                                 orderDate.setClientsByClientId(client);
 
+                                System.out.println("Write date od order (yyyy-mm-dd): ");
+                                orderDate.setOrderDate(Date.valueOf(write()));
+
                                 orderDateMapper.save(orderDate);
 
                                 break;
@@ -1384,7 +1387,7 @@ public class CLI {
         System.out.println("4. Delete client");
         System.out.println("5. Find field in client");
         System.out.println("6. Add order to client");
-        System.out.println("6. Remove order from client");
+        System.out.println("7. Remove order from client");
 
         System.out.println("0. Back");
     }

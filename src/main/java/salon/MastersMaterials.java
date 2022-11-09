@@ -60,6 +60,6 @@ public class MastersMaterials {
 
     @Override
     public String toString() {
-        return  materialsByMaterialsId.getName() + ", " + quantity;
+        return materialsByMaterialsId.getName() + ", " + quantity;
     }
 }

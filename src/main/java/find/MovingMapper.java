@@ -30,18 +30,9 @@ public class MovingMapper extends BaseMapper<MovingInformation> {
     }
 
     public List<MovingInformation> findAlByOrderDate(Object orderDate){
-        return findByField(".byOrderDater", orderDate);
+        return findByField(".byOrderDate", orderDate);
     }
 
-//    public List<MovingInformation> findAlByStaffById(String staffById){
-//        String hql = String.format("Select MI From %s MI join MI.Staff S where S.id like :staffById", getTableName());
-//        Session session = HibernateUtils.getSessionFactory().openSession();
-//        Query<MovingInformation> query = session.createQuery(hql, getType());
-//        query.setParameter("staffById", "%" + staffById + "%");
-//        List<MovingInformation> list = query.list();
-//        session.close();
-//        return list;
-//    }
 
     @Override
     protected Class<MovingInformation> getType() {

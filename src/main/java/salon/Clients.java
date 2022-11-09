@@ -87,9 +87,19 @@ public class Clients {
 
     @Override
     public String toString() {
+
+        String date = "Date: ";
+        int i = 1;
+        for (OrderDate orderDate :
+                orderDatesById) {
+            date += orderDate.getOrderDate();
+            i += 1;
+        }
+
         return surname +
                 " " + name +
                 " " + patronymic +
-                ", " + phoneNumber;
+                ", " + phoneNumber +
+                ", " + date;
     }
 }

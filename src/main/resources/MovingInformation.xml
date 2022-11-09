@@ -14,6 +14,9 @@
     <named-query name="MovingInformation.byOrderNumber">
         <query><![CDATA[FROM MovingInformation mi where upper(cast(mi.orderNumber as string)) like concat('%', upper(?1), '%')]]></query>
     </named-query>
+    <named-query name="MovingInformation.byOrderDate">
+        <query><![CDATA[FROM MovingInformation mi where upper(cast(mi.orderDate as string)) like concat('%', upper(?1), '%')]]></query>
+    </named-query>
 
 
     <entity class="salon.MovingInformation">

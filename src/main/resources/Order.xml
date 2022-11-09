@@ -13,7 +13,7 @@
     </named-query>
 
     <entity class="salon.Order">
-        <table name="order" schema="public" catalog="beauty_salon"/>
+        <table name="order_service" schema="public" catalog="beauty_salon"/>
         <attributes>
             <id name="id">
                 <column name="id"/>
